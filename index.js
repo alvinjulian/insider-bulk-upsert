@@ -7,14 +7,16 @@ const axios = require('axios');
 const Bottleneck = require('bottleneck');
 
 // Change the folder name for json inputs
-const inputsDir = path.join(__dirname, 'inputs');
+const inputsDir = path.join(__dirname, 'inputs/files/20231214/files_091');
 
 // Declare limiter for bottlenecking activity
 // Change the maxConcurrent and minTime values for your needs
 const limiter = new Bottleneck({
-    maxConcurrent: 5,
+    maxConcurrent: 1,
     minTime: 150
 });
+
+var i = 0;
 
 fs.readdir(inputsDir, (err, files) => {
     if (err) {
@@ -24,6 +26,10 @@ fs.readdir(inputsDir, (err, files) => {
 
     files.forEach((file) => {
         limiter.schedule(() => {
+            if(!file.endsWith('.json')) {
+                return;
+            }
+
             const filePath = path.join(inputsDir, file);
 
             // Check the filepath
@@ -33,8 +39,15 @@ fs.readdir(inputsDir, (err, files) => {
             const fileContent = fs.readFileSync(filePath, 'utf8');
             const slicedContent = fileContent.slice(0, -12);
 
+            console.log(slicedContent)
+
             // Parse the file content to JSON
             const jsonContent = JSON.parse(slicedContent);
+
+            console.log(jsonContent)
+
+            i++;
+            console.log(i);
 
             // Upsert API URL
             const url = 'https://unification.useinsider.com/api/user/v1/upsert'
