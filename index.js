@@ -30,7 +30,7 @@ function isEmpty(path) {
 // Change the maxConcurrent and minTime values for your needs
 const limiter = new Bottleneck({
     // max concurrent requests
-    maxConcurrent: 10,
+    maxConcurrent: 3,
     // min time to wait between each request
     minTime: 150
 });
@@ -78,7 +78,10 @@ listDirectories(parentDir).then(directories => {
                         
                         // Read the file content and slide the last 12 characters - Comment these two lines below if you don't need it.
                         const fileContent = fs.readFileSync(filePath, 'utf8');
-                        const slicedContent = fileContent.slice(0, -12);
+                        // const slicedContent = fileContent.slice(0, -12);
+
+                        // To bypass the slicing. If you need slicing, comment the line below.
+                        const slicedContent = fileContent;
             
                         console.log(slicedContent)
             
@@ -87,14 +90,13 @@ listDirectories(parentDir).then(directories => {
 
                         try {
                             jsonContent = JSON.parse(slicedContent);
-                            _combinedData.push(jsonContent);
+                            
+                            _combinedData.push(jsonContent.Users);
+
                         } catch (error) {
                             i++;
                             console.log('JSON Data cannot be parsed row' + i + ' - under filename: ' + filePath)
                         }
-            
-                        console.log(_combinedData)
-            
                         i++
                         console.log(i);
                     } else if (_combinedData.length === _limitPayload) {
@@ -106,7 +108,11 @@ listDirectories(parentDir).then(directories => {
                         const partnerName = ''
                         const requestToken = ''
 
-                        console.log(_combinedData)
+                        const _finalData = {
+                            "users": _combinedData
+                        }
+
+                        console.log(_finalData)
                     
                         axios({
                             method: 'POST',
@@ -116,7 +122,7 @@ listDirectories(parentDir).then(directories => {
                                 'X-REQUEST-TOKEN': requestToken,
                                 'Content-Type': 'application/json'
                             },
-                            data: _combinedData
+                            data: _finalData
                         })
                         .then(response => {
                             if (response.status > 200 && response.status < 300) {
@@ -125,6 +131,7 @@ listDirectories(parentDir).then(directories => {
 
                                 // Reset the combinedData
                                 _combinedData = [];
+                                _finalData = {};
                             }
                         })
                         .catch(error => {
