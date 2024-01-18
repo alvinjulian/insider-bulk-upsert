@@ -91,7 +91,8 @@ listDirectories(parentDir).then(directories => {
                         try {
                             jsonContent = JSON.parse(slicedContent);
                             
-                            _combinedData.push(jsonContent.Users);
+                            // adjust the jsonContent.Users[0] based on your json structure, currently using the [] notation because of the data source is using one. So need to be opened.
+                            _combinedData.push(jsonContent.Users[0]);
 
                         } catch (error) {
                             i++;
@@ -135,8 +136,8 @@ listDirectories(parentDir).then(directories => {
                             }
                         })
                         .catch(error => {
-                            console.log(error.response.status)
-                            console.log(error.response.data)
+                            // If you need detailed error message, change to console.log(error.response.data) or console.log(error.response.status)
+                            console.log(error);
                         })
                     }
                 })
