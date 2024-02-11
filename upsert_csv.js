@@ -86,34 +86,32 @@ csv.parseFile(inputsDir, {
     // Loop through the combined data and call the API
     combinedData.forEach((_data) => {
         limiter.schedule(() => {
-            limiter.schedule(() => {
-                // Upsert API URL
-                const url = 'https://unification.useinsider.com/api/user/v1/upsert'
+            // Upsert API URL
+            const url = 'https://unification.useinsider.com/api/user/v1/upsert'
 
-                // Change the partner name and request token
-                const partnerName = ''
-                const requestToken = ''
+            // Change the partner name and request token
+            const partnerName = ''
+            const requestToken = ''
 
-                axios({
-                        method: 'POST',
-                        url: url,
-                        headers: {
-                            'X-PARTNER-NAME': partnerName,
-                            'X-REQUEST-TOKEN': requestToken,
-                            'Content-Type': 'application/json'
-                        },
-                        data: _data
-                    })
-                    .then(response => {
-                        if (response.status >= 200 && response.status < 300) {
-                            console.log(response.status)
-                            console.log(response.data)
-                        }
-                    })
-                    .catch(error => {
-                        console.log(error.response.status)
-                        console.log(error.response.data)
-                    })
+            axios({
+                method: 'POST',
+                url: url,
+                headers: {
+                    'X-PARTNER-NAME': partnerName,
+                    'X-REQUEST-TOKEN': requestToken,
+                    'Content-Type': 'application/json'
+                },
+                data: _data
+            })
+            .then(response => {
+                if (response.status >= 200 && response.status < 300) {
+                    console.log(response.status)
+                    console.log(response.data)
+                }
+            })
+            .catch(error => {
+                console.log(error.response.status)
+                console.log(error.response.data)
             })
         })
     })
