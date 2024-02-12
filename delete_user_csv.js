@@ -1,5 +1,6 @@
 // Read all files in the inputs directory and call an API to process them
 // and console log the result
+// Visit https://academy.useinsider.com/docs/delete-user-profile-api for more details
 
 const fs = require('fs');
 const path = require('path');
@@ -23,42 +24,15 @@ var i = 0;
 
 function transformCSVtoJSON(data, callback) {
     // Change the key and value based on your CSV file
-    const _email = data['E-Mail'];
-    // const _phoneNumber = data['Phone Number']; // Uncomment this line if you have phone number in your CSV file
-    const _emailOptin = data['email opt in'];
-    const _smsOptin = data['sms opt in'];
-
-    // find age from dob minus datetime now
-    const _dob = data['DOB'];
-    const _age = new Date().getFullYear() - new Date(_dob).getFullYear();
-
-    const _event = data['Event'];
+    const _identifier = data['E-Mail'];
 
     // Customise the JSON structure based on your needs
     let transformedData = {
         "users": {
             "identifiers": {
-                "email": _email,
-                "phone_number": "+446512345678"
-            },
-            "attributes": {
-                "gdpr_optin": true,
-                "email_optin": _emailOptin,
-                "sms_optin": _smsOptin,
-                "age": _age
-            },
-            "events": [{
-                    "event_name": _event,
-                    "timestamp": "2024-01-10T21:35:20Z",
-                    "event_params": {
-                        "custom": {
-                            "breakname": "adamtestbreak",
-                            "breakstartdate": "2023-03-10T21:35:20Z"
-                        }
-                    }
-                }
-
-            ]
+                // Change the code below, match the identifier with the CSV file and your configuration in Insider Panel.
+                "email": _identifier,
+            }
         }
     }
 
@@ -84,11 +58,11 @@ csv.parseFile(inputsDir, {
     console.log('CSV file successfully processed');
     console.log(JSON.stringify(combinedData));
 
-    // Loop through the combined data and call the API
+    // Loop through the combined data and call the API to delete the user profile.
     combinedData.forEach((_data) => {
         limiter.schedule(() => {
-            // Upsert API URL
-            const url = 'https://unification.useinsider.com/api/user/v1/upsert'
+            // Delete API URL
+            const url = "https://unification.useinsider.com/api/user/v1/delete"
 
             // Change the partner name and request token
             const partnerName = ''
