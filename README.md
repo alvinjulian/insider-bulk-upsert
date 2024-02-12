@@ -45,11 +45,12 @@ You can install from [NodeJS](https://nodejs.org), find the latest version of No
 ```
 node --v
 ```
+This code is built using NodeJS version 20.
 
 # Configuration
 
 ## Limiter
-In this code you can see one configuration  that are related to the speed and waiting time. 
+In this code you can see one configuration  that are related to the speed and waiting time. Please note that the speed itself will be depending on the internet speed and your computer capability.
 ```
 // Declare limiter for bottlenecking activity
 // Change the maxConcurrent and minTime values for your needs
