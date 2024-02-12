@@ -1,5 +1,6 @@
 // Read all files in the inputs directory and call an API to process them
 // and console log the result
+// Upsert from JSON Files. If you need from custom CSV, please check upsert_csv.js
 
 const fs = require('fs');
 const path = require('path');
